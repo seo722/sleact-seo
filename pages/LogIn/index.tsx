@@ -51,7 +51,7 @@ const LogIn = () => {
     console.log("로그인", data);
     return (
       <Routes>
-        <Route path="/" element={<Navigate replace to="/workspace/:workspace" />} />
+        <Route path="/*" element={<Navigate replace to="/workspace/Sleact/channel/일반" />} />
       </Routes>
     );
   }
