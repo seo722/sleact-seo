@@ -5,9 +5,10 @@ import { CreateModal } from "./styles";
 interface Props {
   show: boolean;
   onCloseModal: (e: any) => void;
+  closeButton?: boolean;
 }
 
-const Modal: FC<Props> = ({ show, children, onCloseModal }) => {
+const Modal: FC<Props> = ({ show, children, onCloseModal, closeButton }) => {
   const stopPropagation = useCallback((e) => {
     e.stopPropagation();
   }, []);
@@ -17,11 +18,14 @@ const Modal: FC<Props> = ({ show, children, onCloseModal }) => {
   return (
     <CreateModal onClick={onCloseModal}>
       <div onClick={stopPropagation}>
-        <CloseModalButton onClick={onCloseModal}>&times;</CloseModalButton>
+        {closeButton && <CloseModalButton onClick={onCloseModal}>&times;</CloseModalButton>}
         {children}
       </div>
     </CreateModal>
   );
+};
+Modal.defaultProps = {
+  closeButton: true,
 };
 
 export default Modal;
