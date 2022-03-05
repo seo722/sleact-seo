@@ -1,4 +1,6 @@
 import loadable from "@loadable/component";
+import Channel from "@pages/Channel";
+import DirectMessage from "@pages/DirectMessage";
 import React from "react";
 import { Route, Routes } from "react-router";
 
