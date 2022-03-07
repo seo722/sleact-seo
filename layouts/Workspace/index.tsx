@@ -65,7 +65,7 @@ const Workspace: VFC = () => {
     axios.post("/api/users/logout", null, { withCredentials: true }).then(() => {
       mutate();
     });
-  }, []);
+  }, [mutate]);
 
   const onClickUserProfile = useCallback((e) => {
     e.stopPropagation();
