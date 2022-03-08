@@ -1,6 +1,6 @@
 import fetcher from "@utils/fetcher";
 import axios from "axios";
-import React, { FC, useCallback, useState, VFC } from "react";
+import React, { FC, useCallback, useEffect, useState, VFC } from "react";
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import useSWR from "swr";
 import Menu from "@components/Menu";
@@ -34,6 +34,7 @@ import InviteWorkspaceModal from "@components/InviteWorkspaceModal";
 import InviteChannelModal from "@components/InviteChannelModal";
 import ChannelList from "@components/ChannelList";
 import DMList from "@components/DMList";
+import useSocket from "@hooks/useSocket";
 
 const Workspace: VFC = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -46,7 +47,6 @@ const Workspace: VFC = () => {
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput("");
 
   const { workspace, channel } = useParams<{ workspace: string; channel: string }>();
-  console.log(workspace, channel);
   const {
     data: userData,
     error,
@@ -60,6 +60,19 @@ const Workspace: VFC = () => {
     userData ? `/api/workspaces/${workspace}/members` : null,
     fetcher,
   );
+  const [socket, disconnect] = useSocket(workspace);
+
+  useEffect(() => {
+    if (channelData && userData && socket) {
+      console.log(socket);
+      socket.emit("login", { id: userData.id, channels: channelData.map((v) => v.id) });
+    }
+  }, [socket, channelData, userData]);
+  useEffect(() => {
+    return () => {
+      disconnect();
+    };
+  }, [workspace, disconnect]);
 
   const onLogout = useCallback(() => {
     axios.post("/api/users/logout", null, { withCredentials: true }).then(() => {
@@ -218,11 +231,11 @@ const Workspace: VFC = () => {
         onCloseModal={onCloseModal}
         setShowInviteWorkspaceModal={setShowInviteWorkspaceModal}
       />
-      <InviteChannelModal
+      {/* <InviteChannelModal
         show={showInviteChannelModal}
         onCloseModal={onCloseModal}
         setShowInviteChannelModal={setShowInviteChannelModal}
-      />
+      /> */}
       <ToastContainer position="bottom-center" />
     </div>
   );
