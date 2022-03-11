@@ -6,7 +6,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 
 interface Props {
   chatSections: { [key: string]: (IDM | IChat)[] };
-  setSize: (f: (size: number) => number) => Promise<IDM[][] | undefined>;
+  setSize: (f: (size: number) => number) => Promise<(IDM | IChat)[][] | undefined>;
   isEmpty: boolean;
   isReachingEnd: boolean;
   scrollbarRef: RefObject<Scrollbars>;
